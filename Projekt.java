@@ -4,14 +4,14 @@ public class Projekt{
 	
 	public static void main(String[] args){
 		
-		int[] t = {1,1,1,-1,-1,-1,1,-1,1,2,3,4};
+		int[] t = {0,1,1,0,-1,1,0,0,1,2,3,4};
 		
 		//debug
 		for(int i=0; i<(t.length-2); i+=3)
 			System.out.println(t[i]+", "+t[i+1]+", "+t[i+2]);
 		System.out.println();
 		//
-		
+		System.out.println(areCoplanar(t, 0, 1, 3));
 		makeRingsArray(t);
 	}
 
@@ -58,6 +58,19 @@ public class Projekt{
 	
 	private static double distance(int x, int y, int z){
 		return Math.sqrt(x*x+y*y+z*z);
+	}
+	
+	private static boolean areCoplanar(int[] p, int A, int B, int C){
+		
+		A*=3;
+		B*=3;
+		C*=3;
+		
+		if(p[A]*p[B+1]*p[C+2]+p[A+1]*p[A+2]*p[C]+p[A+2]*p[B]*p[C+1]
+			-(p[A+2]*p[B+1]*p[C]+p[A]*p[B+2]*p[C+1]+p[A+1]*p[B]*p[C+2]) == 0)
+			return true;
+		else
+			return false;
 	}
 	
 	
