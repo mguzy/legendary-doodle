@@ -1,22 +1,34 @@
+//Projekt zrealizowany tylko cześciowo
+//segmentuje punkty do oddzielnych grup
+//ze wzgledu na odlegosc od (0,0,0)
+//nie wiem czy ocenia Pan cześciowe rozwiązania
+//ale wrzucam z nadzieją na pare punktów
 
+import java.io.*;
 
 public class Projekt{
 	
+	public static int[] getData(){
+		try{
+			FileInputStream fis = new FileInputStream("Dane.obj");
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			return (int[]) ois.readObject();
+		}catch(Exception ex){
+			System.out.println(ex);
+		}
+		return null;
+	}
+	
 	public static void main(String[] args){
 		
-		int[] t = {0,1,1,0,-1,1,0,0,1,2,3,4};
+		int[] s = getData();
+		int[] t ={1,0,0,0,1,0,1,1,1,0,0,1};
 		
-		//debug
-		for(int i=0; i<(t.length-2); i+=3)
-			System.out.println(t[i]+", "+t[i+1]+", "+t[i+2]);
-		System.out.println();
-		//
-		System.out.println(areCoplanar(t, 0, 1, 4));
 		makeRingsArray(t);
 	}
 
 	//metoda zwróci tablice gdzie pod każdym indeksem(oznaczającym numer punktu)
-	//bedzie znajdować się numer pierścienia do którego punkt został przydzielony
+	//bedzie znajdować się numer sfery(docelowo miało być pierścienia) do którego punkt został przydzielony
 	private static int[] makeRingsArray(int[] pointsArray){
 		
 		//liczba punktów
@@ -32,14 +44,8 @@ public class Projekt{
 		for(int i=0; i<n*3-2; i+=3)
 			distanceArray[i/3] = distance(pointsArray[i], pointsArray[i+1], pointsArray[i+2]);
 		
-		//debug
-		for(int i=0; i<n; i++)
-			System.out.print(distanceArray[i]+", ");
-		System.out.println();
-		//
-		
-		//numerator pierścieni
-		int ringNumber=0;
+		//numerator sfer
+		int sphereNumber=0;
 		
 		//poniższa pętla zmodyfikuje tablice ringsArray taki sposób
 		//że pod danym indeksem(oznaczającym numer punktu) bedzie numer
@@ -50,24 +56,16 @@ public class Projekt{
 			
 			if(tempDistance==-1) continue;
 			
-			ringNumber++;
+			sphereNumber++;
 			for(int j=i; j<n; j++){
 				if(distanceArray[j]==tempDistance){
-					ringsArray[j] = ringNumber;
+					ringsArray[j] = sphereNumber;
 					distanceArray[j] = -1;
 				}
 			}	
 		}
-		
-		//debug
-		for(int i=0; i<n; i++)
-			System.out.print(ringsArray[i]+", ");
-		System.out.println();
-		//
-		
-		
-		//TODO rodzielenie sfer na pierscienie
-		return ringsArray;		
+
+		return ringsArray;
 	}
 	
 	//zwraca odleglosc punktu od punktu (0,0,0)
